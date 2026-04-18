@@ -1,0 +1,2682 @@
+[
+  {
+    "id": 1,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        "sun",
+        null,
+        "moon",
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        "moon",
+        "moon",
+        null,
+        null
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 2,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 5,
+        "r2": 2,
+        "c2": 5,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 4,
+        "r2": 1,
+        "c2": 5,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 2,
+        "r2": 1,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 5,
+        "r2": 4,
+        "c2": 5,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 2,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        "moon",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        "moon",
+        null,
+        "moon"
+      ],
+      [
+        null,
+        "moon",
+        "sun",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        null,
+        "sun"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 3,
+        "c1": 0,
+        "r2": 4,
+        "c2": 0,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 5,
+        "r2": 3,
+        "c2": 5,
+        "type": "same"
+      },
+      {
+        "r1": 1,
+        "c1": 2,
+        "r2": 1,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 2,
+        "c2": 3,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 3,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        "sun",
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        null,
+        "sun",
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 3,
+        "c2": 2,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 1,
+        "r2": 2,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 4,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        "moon",
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        "sun",
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        null,
+        "moon",
+        null,
+        "moon",
+        null
+      ],
+      [
+        "sun",
+        null,
+        null,
+        null,
+        null,
+        "moon"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 2,
+        "r2": 5,
+        "c2": 2,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 3,
+        "r2": 3,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 3,
+        "r2": 2,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 2,
+        "r2": 1,
+        "c2": 2,
+        "type": "same"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 5,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        "moon",
+        null,
+        "sun",
+        "sun",
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        "sun",
+        null,
+        null,
+        "moon"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "moon"
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        "moon",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 3,
+        "c1": 0,
+        "r2": 3,
+        "c2": 1,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 4,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 4,
+        "r2": 2,
+        "c2": 5,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 6,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        null,
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        "sun",
+        null
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 5,
+        "c1": 3,
+        "r2": 5,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 3,
+        "c1": 4,
+        "r2": 3,
+        "c2": 5,
+        "type": "different"
+      },
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 4,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 5,
+        "c1": 4,
+        "r2": 5,
+        "c2": 5,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 7,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        null,
+        null,
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        null,
+        null,
+        "moon",
+        "sun",
+        null,
+        "moon"
+      ],
+      [
+        "moon",
+        null,
+        null,
+        "moon",
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        "moon",
+        null,
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        null,
+        null,
+        null,
+        "moon"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 4,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 3,
+        "r2": 3,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 3,
+        "c1": 0,
+        "r2": 4,
+        "c2": 0,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 5,
+        "r2": 1,
+        "c2": 5,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 5,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 5,
+        "r2": 3,
+        "c2": 5,
+        "type": "same"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 8,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "moon"
+      ],
+      [
+        "moon",
+        null,
+        "sun",
+        null,
+        "moon",
+        "sun"
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        "moon",
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 4,
+        "r2": 4,
+        "c2": 5,
+        "type": "same"
+      },
+      {
+        "r1": 0,
+        "c1": 4,
+        "r2": 0,
+        "c2": 5,
+        "type": "same"
+      },
+      {
+        "r1": 2,
+        "c1": 1,
+        "r2": 3,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 5,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 4,
+        "r2": 4,
+        "c2": 4,
+        "type": "same"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 9,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        null,
+        "sun",
+        "sun"
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ],
+      [
+        "sun",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 5,
+        "c1": 0,
+        "r2": 5,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 0,
+        "r2": 3,
+        "c2": 0,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 3,
+        "r2": 4,
+        "c2": 3,
+        "type": "same"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 10,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        "moon",
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        "moon",
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        "moon",
+        null,
+        "sun",
+        "moon",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        "sun",
+        "moon",
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 2,
+        "c1": 4,
+        "r2": 3,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 3,
+        "r2": 2,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 5,
+        "c1": 0,
+        "r2": 5,
+        "c2": 1,
+        "type": "same"
+      },
+      {
+        "r1": 0,
+        "c1": 2,
+        "r2": 1,
+        "c2": 2,
+        "type": "same"
+      },
+      {
+        "r1": 0,
+        "c1": 2,
+        "r2": 0,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 2,
+        "c2": 3,
+        "type": "same"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 11,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        "moon",
+        "moon",
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        null,
+        null,
+        "moon"
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        "sun",
+        null
+      ],
+      [
+        null,
+        "moon",
+        "moon",
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 5,
+        "c1": 0,
+        "r2": 5,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 0,
+        "r2": 1,
+        "c2": 0,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 4,
+        "r2": 1,
+        "c2": 4,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        "moon",
+        null,
+        "sun",
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 2,
+        "c1": 4,
+        "r2": 3,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 3,
+        "c2": 2,
+        "type": "same"
+      },
+      {
+        "r1": 2,
+        "c1": 1,
+        "r2": 2,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 13,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        "moon",
+        null,
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        "moon",
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        "sun",
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 0,
+        "c1": 5,
+        "r2": 1,
+        "c2": 5,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 2,
+        "r2": 3,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 3,
+        "r2": 2,
+        "c2": 3,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 5,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 0,
+        "r2": 0,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 1,
+        "r2": 0,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        "sun",
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 2,
+        "c1": 1,
+        "r2": 2,
+        "c2": 2,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 3,
+        "r2": 2,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 0,
+        "r2": 0,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 3,
+        "r2": 0,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 1,
+        "r2": 4,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 15,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        "moon",
+        "moon",
+        null,
+        null,
+        null
+      ],
+      [
+        "sun",
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 4,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 1,
+        "c1": 3,
+        "r2": 2,
+        "c2": 3,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 16,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        null,
+        "sun",
+        null,
+        "sun",
+        "moon",
+        null
+      ],
+      [
+        null,
+        "moon",
+        "sun",
+        null,
+        "sun",
+        "moon"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        "moon",
+        null,
+        "moon"
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        "moon",
+        "sun"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 0,
+        "c1": 4,
+        "r2": 1,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 2,
+        "c2": 3,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 4,
+        "r2": 4,
+        "c2": 5,
+        "type": "same"
+      },
+      {
+        "r1": 0,
+        "c1": 0,
+        "r2": 1,
+        "c2": 0,
+        "type": "same"
+      },
+      {
+        "r1": 4,
+        "c1": 2,
+        "r2": 5,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 17,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        "moon",
+        null,
+        "moon",
+        null,
+        null
+      ],
+      [
+        "sun",
+        null,
+        "moon",
+        null,
+        "sun",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        null,
+        "moon"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 3,
+        "c1": 4,
+        "r2": 4,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 3,
+        "c1": 1,
+        "r2": 4,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 4,
+        "c1": 0,
+        "r2": 5,
+        "c2": 0,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "hard",
+    "puzzle": [
+      [
+        null,
+        "moon",
+        null,
+        null,
+        "sun",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        "sun",
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        "moon",
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        "sun",
+        null,
+        null
+      ],
+      [
+        null,
+        "sun",
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 5,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 4,
+        "c1": 0,
+        "r2": 5,
+        "c2": 0,
+        "type": "same"
+      },
+      {
+        "r1": 2,
+        "c1": 1,
+        "r2": 2,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "moon"
+      ]
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "easy",
+    "puzzle": [
+      [
+        null,
+        "sun",
+        "moon",
+        "sun",
+        null,
+        "moon"
+      ],
+      [
+        "sun",
+        null,
+        null,
+        null,
+        "moon",
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        "moon",
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        "moon",
+        null,
+        "sun",
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        null,
+        "sun",
+        "sun"
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 5,
+        "c1": 0,
+        "r2": 5,
+        "c2": 1,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 2,
+        "r2": 0,
+        "c2": 3,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 4,
+        "r2": 1,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 2,
+        "c1": 2,
+        "r2": 3,
+        "c2": 2,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun"
+      ]
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "medium",
+    "puzzle": [
+      [
+        "moon",
+        "moon",
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        "moon",
+        null,
+        null,
+        null,
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        null,
+        null,
+        "moon",
+        "sun",
+        null
+      ],
+      [
+        null,
+        null,
+        "sun",
+        "moon",
+        null,
+        "sun"
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "constraints": [
+      {
+        "r1": 4,
+        "c1": 3,
+        "r2": 4,
+        "c2": 4,
+        "type": "same"
+      },
+      {
+        "r1": 2,
+        "c1": 3,
+        "r2": 2,
+        "c2": 4,
+        "type": "different"
+      },
+      {
+        "r1": 0,
+        "c1": 5,
+        "r2": 1,
+        "c2": 5,
+        "type": "different"
+      },
+      {
+        "r1": 4,
+        "c1": 4,
+        "r2": 4,
+        "c2": 5,
+        "type": "different"
+      }
+    ],
+    "solution": [
+      [
+        "moon",
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "sun"
+      ],
+      [
+        "sun",
+        "moon",
+        "moon",
+        "sun",
+        "sun",
+        "moon"
+      ],
+      [
+        "moon",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "sun"
+      ],
+      [
+        "moon",
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon"
+      ],
+      [
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon",
+        "sun"
+      ],
+      [
+        "sun",
+        "sun",
+        "moon",
+        "sun",
+        "moon",
+        "moon"
+      ]
+    ]
+  }
+]
