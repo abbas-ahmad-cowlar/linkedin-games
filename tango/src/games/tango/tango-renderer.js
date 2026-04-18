@@ -89,27 +89,23 @@ export function renderGrid(puzzle, onCellClick) {
 // ─── Cell Updates ────────────────────────────────────────────────────────────
 
 /**
- * Apply a symbol to a cell element.
- *
- * @param {HTMLElement} cell
- * @param {string|null} symbol - 'sun', 'moon', or null
- * @param {boolean} [animate=true] - Whether to play the appear animation
+ * Apply a symbol to a cell element. No colored backgrounds — matches LinkedIn.
  */
 export function applyCellSymbol(cell, symbol, animate = true) {
-  // Remove existing symbol and state classes
-  cell.classList.remove('tango-cell--sun', 'tango-cell--moon');
+  // Remove existing symbol
   const existingSymbol = cell.querySelector('.tango-symbol');
   if (existingSymbol) existingSymbol.remove();
 
+  // Remove error state when cell changes
+  cell.classList.remove('tango-cell--error');
+
+  const row = cell.dataset.row;
+  const col = cell.dataset.col;
+
   if (symbol === null) {
-    const row = cell.dataset.row;
-    const col = cell.dataset.col;
     cell.setAttribute('aria-label', `Row ${parseInt(row) + 1}, Column ${parseInt(col) + 1}. Empty.`);
     return;
   }
-
-  // Add state class
-  cell.classList.add(symbol === SYM.SUN ? 'tango-cell--sun' : 'tango-cell--moon');
 
   // Create symbol element
   const sym = document.createElement('div');
@@ -118,8 +114,6 @@ export function applyCellSymbol(cell, symbol, animate = true) {
   cell.appendChild(sym);
 
   // Update aria
-  const row = cell.dataset.row;
-  const col = cell.dataset.col;
   const locked = cell.classList.contains('tango-cell--locked');
   cell.setAttribute(
     'aria-label',
@@ -129,12 +123,6 @@ export function applyCellSymbol(cell, symbol, animate = true) {
 
 /**
  * Update a single cell in the grid.
- *
- * @param {HTMLElement} grid
- * @param {number} row
- * @param {number} col
- * @param {string|null} symbol
- * @param {{ animate?: boolean }} [options]
  */
 export function updateCell(grid, row, col, symbol, options = {}) {
   const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
@@ -142,59 +130,60 @@ export function updateCell(grid, row, col, symbol, options = {}) {
   applyCellSymbol(cell, symbol, options.animate !== false);
 }
 
+// ─── Error Highlighting (LinkedIn-style red diagonal stripes) ────────────────
+
 /**
- * Trigger shake animation on a cell.
- *
+ * Highlight error cells with red diagonal stripe pattern.
  * @param {HTMLElement} grid
- * @param {number} row
- * @param {number} col
+ * @param {Set<string>} errorCells - Set of "row,col" strings
  */
-export function shakeCell(grid, row, col) {
-  const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-  if (!cell) return;
+export function highlightErrors(grid, errorCells) {
+  for (const key of errorCells) {
+    const [r, c] = key.split(',');
+    const cell = grid.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+    if (cell) {
+      cell.classList.add('tango-cell--error');
+    }
+  }
+}
 
-  cell.classList.add('tango-cell--shake', 'tango-cell--error');
-
-  // Remove after animation completes
-  setTimeout(() => {
-    cell.classList.remove('tango-cell--shake', 'tango-cell--error');
-  }, 400);
+/**
+ * Clear all error highlights from the grid.
+ * @param {HTMLElement} grid
+ */
+export function clearErrors(grid) {
+  if (!grid) return;
+  grid.querySelectorAll('.tango-cell--error').forEach((cell) => {
+    cell.classList.remove('tango-cell--error');
+  });
 }
 
 // ─── Constraint Markers ──────────────────────────────────────────────────────
 
 /**
  * Create a constraint marker DOM element with calculated position.
- *
- * @param {{ r1: number, c1: number, r2: number, c2: number, type: string }} constraint
- * @returns {HTMLElement}
  */
 function createConstraintMarker(constraint) {
   const { r1, c1, r2, c2, type } = constraint;
-  const isHorizontal = r1 === r2; // same row → horizontal neighbor
+  const isHorizontal = r1 === r2;
 
   const marker = document.createElement('div');
   marker.className = `tango-constraint tango-constraint--${isHorizontal ? 'h' : 'v'}`;
   marker.textContent = type === 'same' ? '=' : '×';
   marker.setAttribute('aria-hidden', 'true');
 
-  // Calculate position
-  // Grid uses CSS grid, so we position relative to the grid container.
-  // Each cell occupies: cellSize + gap. Grid has padding = gap.
-  // We read CSS custom properties at runtime.
-  const cellSize = 56; // fallback, will be overridden by CSS
+  // Position calculation
+  const cellSize = 56; // matches --cell-size
   const gap = 2;
-  const padding = gap; // grid padding = gap
+  const padding = gap;
 
   if (isHorizontal) {
-    // Between (r1, c1) and (r1, c2) where c2 = c1 + 1
     const minC = Math.min(c1, c2);
-    const top = padding + r1 * (cellSize + gap) + cellSize / 2 - 9; // 9 = half marker height
-    const left = padding + (minC + 1) * (cellSize + gap) - gap / 2 - 10; // 10 = half marker width
+    const top = padding + r1 * (cellSize + gap) + cellSize / 2 - 9;
+    const left = padding + (minC + 1) * (cellSize + gap) - gap / 2 - 10;
     marker.style.top = `${top}px`;
     marker.style.left = `${left}px`;
   } else {
-    // Between (r1, c1) and (r2, c1) where r2 = r1 + 1
     const minR = Math.min(r1, r2);
     const top = padding + (minR + 1) * (cellSize + gap) - gap / 2 - 10;
     const left = padding + c1 * (cellSize + gap) + cellSize / 2 - 9;
@@ -203,50 +192,4 @@ function createConstraintMarker(constraint) {
   }
 
   return marker;
-}
-
-/**
- * Reposition all constraint markers (call on resize / mobile).
- * @param {HTMLElement} grid
- * @param {Array} constraints
- */
-export function repositionConstraints(grid, constraints) {
-  // Remove existing markers
-  grid.querySelectorAll('.tango-constraint').forEach((m) => m.remove());
-
-  // Detect actual cell size from rendered grid
-  const firstCell = grid.querySelector('.tango-cell');
-  if (!firstCell) return;
-
-  const cellRect = firstCell.getBoundingClientRect();
-  const cellSize = cellRect.width;
-  const gridStyle = getComputedStyle(grid);
-  const gap = parseFloat(gridStyle.gap) || 2;
-  const padding = parseFloat(gridStyle.padding) || gap;
-
-  for (const con of constraints) {
-    const { r1, c1, r2, c2, type } = con;
-    const isHorizontal = r1 === r2;
-
-    const marker = document.createElement('div');
-    marker.className = `tango-constraint tango-constraint--${isHorizontal ? 'h' : 'v'}`;
-    marker.textContent = type === 'same' ? '=' : '×';
-    marker.setAttribute('aria-hidden', 'true');
-
-    if (isHorizontal) {
-      const minC = Math.min(c1, c2);
-      const top = padding + r1 * (cellSize + gap) + cellSize / 2 - 9;
-      const left = padding + (minC + 1) * (cellSize + gap) - gap / 2 - 10;
-      marker.style.top = `${top}px`;
-      marker.style.left = `${left}px`;
-    } else {
-      const minR = Math.min(r1, r2);
-      const top = padding + (minR + 1) * (cellSize + gap) - gap / 2 - 10;
-      const left = padding + c1 * (cellSize + gap) + cellSize / 2 - 9;
-      marker.style.top = `${top}px`;
-      marker.style.left = `${left}px`;
-    }
-
-    grid.appendChild(marker);
-  }
 }
