@@ -1,0 +1,163 @@
+/* ─── Queens Grid ─────────────────────────────────────────────────────────── */
+
+.queens-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--q-grid-size), var(--q-cell-size));
+  grid-template-rows: repeat(var(--q-grid-size), var(--q-cell-size));
+  gap: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  /* Outer border around the entire grid */
+  border: var(--q-border-width) solid var(--grid-border);
+}
+
+/* ─── Cells ──────────────────────────────────────────────────────────────── */
+
+.queens-cell {
+  width: var(--q-cell-size);
+  height: var(--q-cell-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  /* Thin subtle border between ALL cells (intra-region grid lines) */
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: filter var(--dur-fast), transform var(--dur-fast);
+  outline: none;
+  /* background-color set inline by renderer */
+}
+
+/* No hover or active feedback — cells are static like LinkedIn */
+
+.queens-cell:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent-blue);
+  z-index: 1;
+}
+
+/* ─── Region Borders ─────────────────────────────────────────────────────── */
+/*
+ * Thick dark borders ONLY between cells of different regions.
+ * Cells within the same region share NO border — they merge into solid blobs.
+ * This is the key visual that makes it look like LinkedIn.
+ */
+
+.queens-cell--border-top {
+  border-top: var(--q-border-width) solid var(--grid-border);
+}
+.queens-cell--border-bottom {
+  border-bottom: var(--q-border-width) solid var(--grid-border);
+}
+.queens-cell--border-left {
+  border-left: var(--q-border-width) solid var(--grid-border);
+}
+.queens-cell--border-right {
+  border-right: var(--q-border-width) solid var(--grid-border);
+}
+
+/* ─── Queen Symbol ───────────────────────────────────────────────────────── */
+
+.queens-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.queens-symbol--queen {
+  font-size: calc(var(--q-cell-size) * 0.5);
+  color: #1B1F23;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  user-select: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+}
+
+/* ─── Marker Symbol (small dot, like LinkedIn) ───────────────────────────── */
+
+.queens-symbol--marker {
+  font-size: calc(var(--q-cell-size) * 0.35);
+  color: rgba(0, 0, 0, 0.30);
+  font-weight: 700;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ─── Error State ────────────────────────────────────────────────────────── */
+
+.queens-cell--error {
+  background-color: rgba(220, 50, 47, 0.45) !important;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(180, 30, 30, 0.35) 5px,
+    rgba(180, 30, 30, 0.35) 10px
+  ) !important;
+}
+
+.queens-cell--error .queens-symbol--queen {
+  color: #fff;
+  text-shadow: 0 0 6px rgba(220, 50, 47, 0.9), 0 1px 2px rgba(0, 0, 0, 0.4);
+  filter: drop-shadow(0 0 4px rgba(220, 50, 47, 0.7));
+}
+
+/* ─── Win State ──────────────────────────────────────────────────────────── */
+
+.queens-grid--won .queens-cell {
+  cursor: default;
+}
+.queens-grid--won .queens-cell:hover {
+  filter: none;
+}
+.queens-grid--won .queens-cell:active {
+  transform: none;
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+
+@keyframes queens-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.queens-symbol--entering {
+  animation: queens-pop var(--dur-normal) ease-out;
+}
+
+@keyframes queens-cell-win {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.queens-cell--win-pulse {
+  animation: queens-cell-win 400ms ease-in-out;
+}
+
+/* ─── N≥8 Thinner Borders ─────────────────────────────────────────────────── */
+
+.queens-grid[data-size="8"],
+.queens-grid[data-size="9"] {
+  --q-border-width: 2px;
+}
+
+/* ─── Responsive (≤400px) ────────────────────────────────────────────────── */
+
+@media (max-width: 400px) {
+  :root {
+    --q-border-width: 2px;
+  }
+}
