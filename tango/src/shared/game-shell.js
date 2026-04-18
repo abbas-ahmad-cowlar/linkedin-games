@@ -3,7 +3,7 @@
  * @module shared/game-shell
  */
 
-import { navigate } from '../router.js';
+// No router import needed — back button uses window.location
 
 /**
  * Create the game shell DOM structure.
@@ -45,8 +45,10 @@ export function createGameShell({ title, onUndo, onReset }) {
     <div id="sr-announcements" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
   `;
 
-  // Wire events
-  shell.querySelector('#btn-back').addEventListener('click', () => navigate('/'));
+  // Wire events — back navigates to the hub (separate app at /)
+  shell.querySelector('#btn-back').addEventListener('click', () => {
+    window.location.href = '/';
+  });
 
   const undoBtn = shell.querySelector('#btn-undo');
   const resetBtn = shell.querySelector('#btn-reset');
