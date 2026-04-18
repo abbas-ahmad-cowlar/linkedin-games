@@ -1,0 +1,209 @@
+/* ─── Tango Grid ─────────────────────────────────────────────────────────── */
+
+.tango-grid {
+  display: grid;
+  grid-template-columns: repeat(6, var(--cell-size));
+  grid-template-rows: repeat(6, var(--cell-size));
+  gap: var(--cell-gap);
+  position: relative;
+  background: var(--bg-secondary);
+  padding: var(--cell-gap);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── Cells ──────────────────────────────────────────────────────────────── */
+
+.tango-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--dur-fast), transform var(--dur-fast);
+  position: relative;
+  outline: none;
+}
+
+.tango-cell:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-blue);
+  z-index: 1;
+}
+
+.tango-cell:hover {
+  background: var(--bg-surface-hover);
+}
+
+.tango-cell:active {
+  transform: scale(0.92);
+}
+
+/* Pre-filled / locked cells */
+.tango-cell--locked {
+  cursor: default;
+}
+.tango-cell--locked:hover {
+  background: var(--bg-surface);
+}
+.tango-cell--locked:active {
+  transform: none;
+}
+
+/* Sun cell */
+.tango-cell--sun {
+  background: var(--sun-gold-bg);
+}
+.tango-cell--sun:hover {
+  background: rgba(255, 213, 79, 0.25);
+}
+
+/* Moon cell */
+.tango-cell--moon {
+  background: var(--moon-purple-bg);
+}
+.tango-cell--moon:hover {
+  background: rgba(179, 157, 219, 0.25);
+}
+
+/* Locked sun/moon don't change on hover */
+.tango-cell--locked.tango-cell--sun:hover {
+  background: var(--sun-gold-bg);
+}
+.tango-cell--locked.tango-cell--moon:hover {
+  background: var(--moon-purple-bg);
+}
+
+/* ─── Symbol Icons (CSS-only) ────────────────────────────────────────────── */
+
+.tango-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+}
+
+/* Sun: gold circle with glow */
+.tango-symbol--sun {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #FFECB3, var(--sun-gold));
+  box-shadow: var(--shadow-glow-sun);
+}
+
+/* Moon: crescent via clipping */
+.tango-symbol--moon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--moon-purple);
+  box-shadow: var(--shadow-glow-moon);
+  position: relative;
+}
+.tango-symbol--moon::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+}
+/* Fix moon bg for sun/moon cell backgrounds */
+.tango-cell--moon .tango-symbol--moon::after {
+  background: var(--moon-purple-bg);
+}
+.tango-cell--locked.tango-cell--moon .tango-symbol--moon::after {
+  background: var(--moon-purple-bg);
+}
+
+/* ─── Constraint Markers ─────────────────────────────────────────────────── */
+
+.tango-constraint {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  pointer-events: none;
+  z-index: var(--z-constraints);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.tango-constraint--h {
+  width: 20px;
+  height: 18px;
+}
+
+.tango-constraint--v {
+  width: 18px;
+  height: 20px;
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-6px); }
+  30% { transform: translateX(6px); }
+  50% { transform: translateX(-4px); }
+  70% { transform: translateX(4px); }
+  90% { transform: translateX(-2px); }
+}
+
+.tango-cell--shake {
+  animation: shake var(--dur-slow) ease-in-out;
+}
+
+.tango-cell--error {
+  background: var(--accent-red-bg) !important;
+  transition: background var(--dur-slow);
+}
+
+@keyframes symbolAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.tango-symbol--entering {
+  animation: symbolAppear var(--dur-normal) ease-out;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────────────── */
+
+@media (max-width: 400px) {
+  .tango-grid {
+    grid-template-columns: repeat(6, var(--cell-size-mobile));
+    grid-template-rows: repeat(6, var(--cell-size-mobile));
+  }
+  .tango-symbol {
+    width: 22px;
+    height: 22px;
+  }
+  .tango-symbol--sun {
+    width: 22px;
+    height: 22px;
+  }
+  .tango-symbol--moon {
+    width: 20px;
+    height: 20px;
+  }
+  .tango-symbol--moon::after {
+    width: 15px;
+    height: 15px;
+  }
+}
