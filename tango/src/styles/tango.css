@@ -6,7 +6,7 @@
   grid-template-rows: repeat(6, var(--cell-size));
   gap: var(--cell-gap);
   position: relative;
-  background: var(--bg-secondary);
+  background: var(--grid-border);
   padding: var(--cell-gap);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
@@ -40,7 +40,7 @@
   transform: scale(0.92);
 }
 
-/* Pre-filled / locked cells */
+/* Pre-filled / locked cells — same look, just not clickable */
 .tango-cell--locked {
   cursor: default;
 }
@@ -51,75 +51,75 @@
   transform: none;
 }
 
-/* Sun cell */
-.tango-cell--sun {
-  background: var(--sun-gold-bg);
-}
-.tango-cell--sun:hover {
-  background: rgba(255, 213, 79, 0.25);
-}
-
-/* Moon cell */
-.tango-cell--moon {
-  background: var(--moon-purple-bg);
-}
-.tango-cell--moon:hover {
-  background: rgba(179, 157, 219, 0.25);
+/* Error state — LinkedIn-style red diagonal stripes */
+.tango-cell--error {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      rgba(231, 76, 60, 0.35) 4px,
+      rgba(231, 76, 60, 0.35) 8px
+    ),
+    var(--bg-surface) !important;
 }
 
-/* Locked sun/moon don't change on hover */
-.tango-cell--locked.tango-cell--sun:hover {
-  background: var(--sun-gold-bg);
-}
-.tango-cell--locked.tango-cell--moon:hover {
-  background: var(--moon-purple-bg);
-}
-
-/* ─── Symbol Icons (CSS-only) ────────────────────────────────────────────── */
+/* ─── Symbol Icons ───────────────────────────────────────────────────────── */
 
 .tango-symbol {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
   pointer-events: none;
 }
 
-/* Sun: gold circle with glow */
+/* Sun: warm orange solid circle — matches LinkedIn's style */
 .tango-symbol--sun {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #FFECB3, var(--sun-gold));
-  box-shadow: var(--shadow-glow-sun);
+  background: var(--sun-orange);
+  border: 2.5px solid var(--sun-border);
 }
 
-/* Moon: crescent via clipping */
+/* Moon: blue crescent — drawn with two overlapping circles */
 .tango-symbol--moon {
+  width: 28px;
+  height: 28px;
+  position: relative;
+}
+
+.tango-symbol--moon::before {
+  content: '';
+  position: absolute;
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--moon-purple);
-  box-shadow: var(--shadow-glow-moon);
-  position: relative;
+  background: var(--moon-blue);
+  top: 2px;
+  left: 1px;
 }
+
 .tango-symbol--moon::after {
   content: '';
   position: absolute;
-  top: -3px;
-  right: -3px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--bg-surface);
+  top: 0px;
+  left: 8px;
 }
-/* Fix moon bg for sun/moon cell backgrounds */
-.tango-cell--moon .tango-symbol--moon::after {
-  background: var(--moon-purple-bg);
+
+/* Fix moon cutout on hover */
+.tango-cell:hover .tango-symbol--moon::after {
+  background: var(--bg-surface-hover);
 }
-.tango-cell--locked.tango-cell--moon .tango-symbol--moon::after {
-  background: var(--moon-purple-bg);
+.tango-cell--locked:hover .tango-symbol--moon::after {
+  background: var(--bg-surface);
+}
+.tango-cell--error .tango-symbol--moon::after {
+  background: var(--accent-red-bg);
 }
 
 /* ─── Constraint Markers ─────────────────────────────────────────────────── */
@@ -129,13 +129,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   pointer-events: none;
   z-index: var(--z-constraints);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-sm);
+  background: var(--grid-border);
+  border-radius: 2px;
 }
 
 .tango-constraint--h {
@@ -163,15 +163,10 @@
   animation: shake var(--dur-slow) ease-in-out;
 }
 
-.tango-cell--error {
-  background: var(--accent-red-bg) !important;
-  transition: background var(--dur-slow);
-}
-
 @keyframes symbolAppear {
   from {
     opacity: 0;
-    transform: scale(0.7);
+    transform: scale(0.6);
   }
   to {
     opacity: 1;
@@ -191,17 +186,15 @@
     grid-template-columns: repeat(6, var(--cell-size-mobile));
     grid-template-rows: repeat(6, var(--cell-size-mobile));
   }
-  .tango-symbol { width: 22px; height: 22px; }
-  .tango-symbol--sun { width: 22px; height: 22px; }
-  .tango-symbol--moon { width: 20px; height: 20px; }
-  .tango-symbol--moon::after { width: 15px; height: 15px; }
+  .tango-symbol--sun { width: 24px; height: 24px; }
+  .tango-symbol--moon { width: 24px; height: 24px; }
+  .tango-symbol--moon::before { width: 20px; height: 20px; }
+  .tango-symbol--moon::after { width: 16px; height: 16px; }
 }
 
 /* Very small phones (≤ 320px) */
 @media (max-width: 320px) {
-  :root {
-    --cell-size-mobile: 44px;
-  }
+  :root { --cell-size-mobile: 44px; }
   .tango-constraint { font-size: 11px; }
   .tango-constraint--h { width: 16px; height: 14px; }
   .tango-constraint--v { width: 14px; height: 16px; }
@@ -225,28 +218,13 @@
     gap: var(--space-md);
     padding-top: var(--space-sm);
   }
-  .game-header {
-    width: 100%;
-    order: -1;
-  }
-  .game-board {
-    flex-shrink: 0;
-  }
-  .game-controls {
-    flex-direction: column;
-    align-self: center;
-  }
-  :root {
-    --cell-size: 44px;
-  }
-  .tango-symbol--sun { width: 20px; height: 20px; }
-  .tango-symbol--moon { width: 18px; height: 18px; }
-  .tango-symbol--moon::after { width: 14px; height: 14px; }
+  .game-header { width: 100%; order: -1; }
+  .game-board { flex-shrink: 0; }
+  .game-controls { flex-direction: column; align-self: center; }
+  :root { --cell-size: 44px; }
 }
 
 /* Tablet / Desktop centering */
 @media (min-width: 768px) {
-  .game-page {
-    padding-top: var(--space-2xl);
-  }
+  .game-page { padding-top: var(--space-2xl); }
 }
