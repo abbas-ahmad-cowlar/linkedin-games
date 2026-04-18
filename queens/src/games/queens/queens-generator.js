@@ -259,7 +259,8 @@ function isRegionConnectedWithout(regionMap, N, regionId, excludeR, excludeC) {
 
 /**
  * Perturb region borders to eliminate alternative solutions.
- * Finds alternative solutions and swaps border cells to invalidate them.
+ * Finds alternative solutions and modifies the region map to invalidate them
+ * while preserving the intended solution.
  *
  * @param {number[][]} regionMap - Region map (cloned internally, original not modified)
  * @param {{r: number, c: number}[]} queens - The intended solution
@@ -270,7 +271,14 @@ function isRegionConnectedWithout(regionMap, N, regionId, excludeR, excludeC) {
 function perturbRegions(regionMap, queens, N, rng) {
   // Deep clone the region map
   const rm = regionMap.map((row) => [...row]);
-  const maxPerturbations = 30;
+
+  // Map each queen's row to its region
+  const queenRegionByRow = new Map();
+  for (let i = 0; i < N; i++) {
+    queenRegionByRow.set(queens[i].r, rm[queens[i].r][queens[i].c]);
+  }
+
+  const maxPerturbations = 50;
 
   for (let iter = 0; iter < maxPerturbations; iter++) {
     const solutions = solve(rm, 2);
@@ -282,76 +290,91 @@ function perturbRegions(regionMap, queens, N, rng) {
     const alt = solutions.find(
       (sol) => !sol.every((q, i) => q.r === queens[i].r && q.c === queens[i].c)
     );
-    if (!alt) return rm; // Only our solution found
+    if (!alt) return rm;
 
-    // Find a queen position that differs between our solution and the alternative
-    let diffIdx = -1;
+    // Find ALL differing queen positions
+    const diffs = [];
     for (let i = 0; i < N; i++) {
       if (alt[i].r !== queens[i].r || alt[i].c !== queens[i].c) {
-        diffIdx = i;
-        break;
+        diffs.push(i);
       }
     }
-    if (diffIdx === -1) return rm;
+    if (diffs.length === 0) return rm;
 
-    // The alternative places a queen at alt[diffIdx] which should be in a different region
-    // than its current region assignment to invalidate this alternative.
-    // Strategy: make the alt queen's cell belong to the same region as our queen in that row.
-    const altQ = alt[diffIdx];
-    const ourQ = queens[diffIdx];
-    const ourRegion = rm[ourQ.r][ourQ.c]; // Region of our queen
-    const altRegion = rm[altQ.r][altQ.c]; // Region of the alt queen
+    // Shuffle diffs and try each one
+    shuffle(diffs, rng);
 
-    if (ourRegion === altRegion) {
-      // They're already in the same region — try a different approach:
-      // swap a border cell of the alt queen's region to break it
-      // Skip this iteration and try another solution
-      continue;
-    }
+    let madeChange = false;
 
-    // Try to extend ourRegion to include the alt queen's cell
-    // by finding a path of cells from ourRegion to the alt cell
-    // and reassigning them. But this is complex, so instead:
-    // Find a border cell adjacent to both regions and swap it.
+    for (const diffIdx of diffs) {
+      const altQ = alt[diffIdx];   // Where the alternative places its queen
+      const altRegion = rm[altQ.r][altQ.c]; // Current region of that cell
 
-    // Simpler approach: find any border cell of altRegion that's adjacent to ourRegion
-    // and swap it to ourRegion. This changes the shape and may break the alt solution.
-    const borderCells = [];
-    for (let r = 0; r < N; r++) {
-      for (let c = 0; c < N; c++) {
-        if (rm[r][c] !== altRegion) continue;
-        // Skip queen cells — they must stay in their region
-        if (r === queens[altRegion]?.r && c === queens[altRegion]?.c) continue;
+      // We want to change the region of the alt queen's cell so it becomes
+      // the same region as another queen in the alt solution, making it invalid.
+      // Find neighbor regions of altQ cell
+      const neighborRegions = new Set();
+      for (const [dr, dc] of DIRS_4) {
+        const nr = altQ.r + dr;
+        const nc = altQ.c + dc;
+        if (inBounds(nr, nc, N) && rm[nr][nc] !== altRegion) {
+          neighborRegions.add(rm[nr][nc]);
+        }
+      }
 
-        // Check if adjacent to ourRegion
-        for (const [dr, dc] of DIRS_4) {
-          const nr = r + dr;
-          const nc = c + dc;
-          if (inBounds(nr, nc, N) && rm[nr][nc] === ourRegion) {
-            borderCells.push({ r, c });
-            break;
+      // Try reassigning the alt cell to each neighbor region
+      const candidates = [...neighborRegions];
+      shuffle(candidates, rng);
+
+      for (const targetRegion of candidates) {
+        // Don't reassign a queen cell
+        const isQueenCell = queens.some((q) => q.r === altQ.r && q.c === altQ.c);
+        if (isQueenCell) continue;
+
+        // Check connectivity of the old region after removing this cell
+        if (!isRegionConnectedWithout(rm, N, altRegion, altQ.r, altQ.c)) continue;
+
+        // Swap
+        rm[altQ.r][altQ.c] = targetRegion;
+        madeChange = true;
+        break;
+      }
+
+      if (madeChange) break;
+
+      // Alternative: try swapping a border cell of altRegion to a neighbor region
+      const borderCells = [];
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          if (rm[r][c] !== altRegion) continue;
+          // Skip queen cells
+          if (queens.some((q) => q.r === r && q.c === c)) continue;
+
+          for (const [dr, dc] of DIRS_4) {
+            const nr = r + dr;
+            const nc = c + dc;
+            if (inBounds(nr, nc, N) && rm[nr][nc] !== altRegion) {
+              borderCells.push({ r, c, target: rm[nr][nc] });
+              break;
+            }
           }
         }
       }
+
+      if (borderCells.length > 0) {
+        shuffle(borderCells, rng);
+        for (const cell of borderCells) {
+          if (!isRegionConnectedWithout(rm, N, altRegion, cell.r, cell.c)) continue;
+          rm[cell.r][cell.c] = cell.target;
+          madeChange = true;
+          break;
+        }
+      }
+
+      if (madeChange) break;
     }
 
-    if (borderCells.length === 0) continue;
-
-    shuffle(borderCells, rng);
-
-    // Try swapping cells
-    let swapped = false;
-    for (const cell of borderCells) {
-      // Check that removing this cell keeps altRegion connected
-      if (!isRegionConnectedWithout(rm, N, altRegion, cell.r, cell.c)) continue;
-
-      // Swap
-      rm[cell.r][cell.c] = ourRegion;
-      swapped = true;
-      break;
-    }
-
-    if (!swapped) continue;
+    if (!madeChange) break;
   }
 
   // Final check
