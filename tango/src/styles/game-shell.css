@@ -198,6 +198,32 @@
   background: var(--bg-surface-hover);
 }
 
+/* ─── Toast (LinkedIn-style error message) ───────────────────────────────── */
+
+.game-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-red);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  opacity: 0;
+  transition: transform var(--dur-normal) ease-out, opacity var(--dur-normal) ease-out;
+  max-width: 90vw;
+  text-align: center;
+}
+.game-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ─── Reduced Motion ─────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
