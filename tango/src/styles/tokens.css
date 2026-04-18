@@ -18,11 +18,11 @@
   --accent-orange:    #F5A623;
   --accent-red-bg:    rgba(231, 76, 60, 0.15);
 
-  /* === Tango-Specific === */
-  --sun-gold:         #FFD54F;
-  --sun-gold-bg:      rgba(255, 213, 79, 0.15);
-  --moon-purple:      #B39DDB;
-  --moon-purple-bg:   rgba(179, 157, 219, 0.15);
+  /* === Tango-Specific (matched to LinkedIn) === */
+  --sun-orange:       #F5A623;
+  --sun-border:       #E09410;
+  --moon-blue:        #8EAFC0;
+  --grid-border:      #2A2E33;
 
   /* === Queens Palette (future) === */
   --pastel-pink:      #F4A0B5;
@@ -54,8 +54,6 @@
   --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg:        0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-glow-sun:  0 0 12px rgba(255, 213, 79, 0.4);
-  --shadow-glow-moon: 0 0 12px rgba(179, 157, 219, 0.4);
 
   /* === Animation === */
   --dur-fast:         100ms;
