@@ -183,27 +183,70 @@
   animation: symbolAppear var(--dur-normal) ease-out;
 }
 
-/* ─── Mobile ─────────────────────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
 
+/* Small phones (≤ 400px) */
 @media (max-width: 400px) {
   .tango-grid {
     grid-template-columns: repeat(6, var(--cell-size-mobile));
     grid-template-rows: repeat(6, var(--cell-size-mobile));
   }
-  .tango-symbol {
-    width: 22px;
-    height: 22px;
+  .tango-symbol { width: 22px; height: 22px; }
+  .tango-symbol--sun { width: 22px; height: 22px; }
+  .tango-symbol--moon { width: 20px; height: 20px; }
+  .tango-symbol--moon::after { width: 15px; height: 15px; }
+}
+
+/* Very small phones (≤ 320px) */
+@media (max-width: 320px) {
+  :root {
+    --cell-size-mobile: 44px;
   }
-  .tango-symbol--sun {
-    width: 22px;
-    height: 22px;
+  .tango-constraint { font-size: 11px; }
+  .tango-constraint--h { width: 16px; height: 14px; }
+  .tango-constraint--v { width: 14px; height: 16px; }
+}
+
+/* Safe area insets for notched phones */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .game-page {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
   }
-  .tango-symbol--moon {
-    width: 20px;
-    height: 20px;
+}
+
+/* Landscape on mobile */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-page {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    padding-top: var(--space-sm);
   }
-  .tango-symbol--moon::after {
-    width: 15px;
-    height: 15px;
+  .game-header {
+    width: 100%;
+    order: -1;
+  }
+  .game-board {
+    flex-shrink: 0;
+  }
+  .game-controls {
+    flex-direction: column;
+    align-self: center;
+  }
+  :root {
+    --cell-size: 44px;
+  }
+  .tango-symbol--sun { width: 20px; height: 20px; }
+  .tango-symbol--moon { width: 18px; height: 18px; }
+  .tango-symbol--moon::after { width: 14px; height: 14px; }
+}
+
+/* Tablet / Desktop centering */
+@media (min-width: 768px) {
+  .game-page {
+    padding-top: var(--space-2xl);
   }
 }
