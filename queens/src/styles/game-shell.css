@@ -37,11 +37,40 @@
   background: var(--bg-surface);
 }
 
+.game-header__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
 .game-header__title {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+
+.game-header__badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 10px;
+  border-radius: var(--radius-full, 999px);
+  line-height: 1.4;
+}
+.game-header__badge--easy {
+  background: rgba(87, 196, 122, 0.2);
+  color: #57C47A;
+}
+.game-header__badge--medium {
+  background: rgba(245, 166, 35, 0.2);
+  color: #F5A623;
+}
+.game-header__badge--hard {
+  background: rgba(231, 76, 60, 0.2);
+  color: #E74C3C;
 }
 
 .game-header__timer {
@@ -224,6 +253,74 @@
 .game-toast--visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Hint Panel ─────────────────────────────────────────────────────────── */
+
+.hint-panel {
+  width: 100%;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--bg-surface-hover);
+  animation: hint-slide-up 200ms ease-out;
+}
+
+.hint-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.hint-panel__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.hint-panel__close {
+  font-size: 18px;
+  color: var(--text-muted);
+  padding: 4px;
+  cursor: pointer;
+  line-height: 1;
+}
+.hint-panel__close:hover {
+  color: var(--text-primary);
+}
+
+.hint-panel__message {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
+}
+
+.hint-panel__action {
+  padding: 8px 20px;
+  border-radius: var(--radius-full, 999px);
+  border: 2px solid var(--bg-surface-hover);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.hint-panel__action:hover {
+  background: var(--bg-surface);
+}
+
+.game-controls__btn--hint-active {
+  background: var(--accent-blue) !important;
+  color: #000 !important;
+  border-color: var(--accent-blue) !important;
+}
+
+@keyframes hint-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Reduced Motion ─────────────────────────────────────────────────────── */
