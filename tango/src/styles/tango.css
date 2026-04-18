@@ -187,9 +187,7 @@
     grid-template-rows: repeat(6, var(--cell-size-mobile));
   }
   .tango-symbol--sun { width: 24px; height: 24px; }
-  .tango-symbol--moon { width: 24px; height: 24px; }
-  .tango-symbol--moon::before { width: 20px; height: 20px; }
-  .tango-symbol--moon::after { width: 16px; height: 16px; }
+  .tango-symbol--moon { width: 18px; height: 18px; box-shadow: 6px -2px 0 1.5px var(--moon-blue); }
 }
 
 /* Very small phones (≤ 320px) */
