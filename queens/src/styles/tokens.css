@@ -1,0 +1,69 @@
+:root {
+  /* === Background === */
+  --bg-primary:       #1B1F23;
+  --bg-secondary:     #2D2D2D;
+  --bg-surface:       #3A3A3A;
+  --bg-surface-hover: #4A4A4A;
+  --bg-surface-active:#525252;
+
+  /* === Text === */
+  --text-primary:     #FFFFFF;
+  --text-secondary:   #B0B0B0;
+  --text-muted:       #787878;
+
+  /* === Accent === */
+  --accent-blue:      #70B5F9;
+  --accent-green:     #57C47A;
+  --accent-red:       #E74C3C;
+  --accent-orange:    #F5A623;
+  --accent-red-bg:    rgba(231, 76, 60, 0.15);
+
+  /* === Queens Region Palette (bright, saturated — LinkedIn match) === */
+  --region-red:       #EF6A6E;
+  --region-orange:    #F5A843;
+  --region-green:     #7EC880;
+  --region-blue:      #6EB5F5;
+  --region-purple:    #B38EDC;
+  --region-pink:      #F19FC3;
+  --region-yellow:    #E8E255;
+  --region-teal:      #5CC6C8;
+  --region-gray:      #C8C8C8;
+
+  /* === Grid (Queens Specific) === */
+  --grid-border:      #2A2E33;
+  --q-cell-size:      60px;
+  --q-grid-size:      5;
+  --q-border-width:   3px;
+
+  /* === Spacing === */
+  --space-xs:         4px;
+  --space-sm:         8px;
+  --space-md:         16px;
+  --space-lg:         24px;
+  --space-xl:         32px;
+  --space-2xl:        48px;
+
+  /* === Border Radius === */
+  --radius-sm:        4px;
+  --radius-md:        8px;
+  --radius-lg:        12px;
+  --radius-xl:        16px;
+  --radius-full:      9999px;
+
+  /* === Shadows === */
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg:        0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* === Animation === */
+  --dur-fast:         100ms;
+  --dur-normal:       200ms;
+  --dur-slow:         400ms;
+  --dur-confetti:     2000ms;
+
+  /* === Z-Index === */
+  --z-grid:           1;
+  --z-constraints:    2;
+  --z-modal:          100;
+  --z-confetti:       200;
+}
