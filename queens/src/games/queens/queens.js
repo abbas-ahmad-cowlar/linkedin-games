@@ -10,18 +10,19 @@
  */
 
 import { CELL, createBoard, findQueens, findAllErrors, checkWin } from './queens-logic.js';
-import { renderGrid, updateCell, highlightErrors, clearErrors } from './queens-renderer.js';
+import { renderGrid, updateCell, highlightErrors, clearErrors, applyHintHighlights, clearHintHighlights } from './queens-renderer.js';
 import {
   getDailyPuzzle,
   getPracticePuzzle,
   saveGameState,
   loadGameState,
 } from './queens-daily.js';
+import { getHint } from './queens-hints.js';
+import { recordQueensSolve, showStatsModal } from './queens-stats.js';
 import { createGameShell, announce } from '../../shared/game-shell.js';
 import { createTimer, formatTime } from '../../shared/timer.js';
 import { fireConfetti } from '../../shared/confetti.js';
 import { showModal } from '../../shared/modal.js';
-import { navigate } from '../../router.js';
 import { recordWin, getStreak } from '../../shared/streak.js';
 import * as storage from '../../shared/storage.js';
 
@@ -42,6 +43,8 @@ let firstMove = true;
 let isDaily = true;
 let saveDebounceId = null;
 let toastTimeout = null;
+let hintsUsed = 0;
+let currentHint = null;
 
 // ─── Lifecycle ───────────────────────────────────────────────────────────────
 
@@ -49,10 +52,15 @@ export async function mount(container) {
   state = 'LOADING';
   isDaily = true;
 
+  // Peek at daily puzzle's difficulty for the badge
+  const previewDifficulty = (loadGameState()?.difficulty) || null;
+
   const shellParts = createGameShell({
     title: 'QUEENS',
+    difficulty: previewDifficulty,
     onUndo: handleUndo,
     onReset: handleReset,
+    onHint: handleHint,
   });
   shell = shellParts;
   container.appendChild(shellParts.shell);
@@ -90,6 +98,14 @@ function loadFromPuzzle(puzzleData, shellParts) {
   board = createBoard(size);
   moveHistory = [];
   firstMove = true;
+  hintsUsed = 0;
+  currentHint = null;
+
+  // Update badge now that we know the difficulty
+  if (shell?.difficultyBadge) {
+    shell.difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    shell.difficultyBadge.className = `game-header__badge game-header__badge--${difficulty}`;
+  }
 
   grid = renderGrid(puzzleData, handleCellClick, handleCellDrag, handleCellQueen);
   shellParts.boardContainer.appendChild(grid);
@@ -143,7 +159,7 @@ function showCompletedState() {
       ],
       actions: [
         { label: 'Practice', variant: 'secondary', onClick: startPractice },
-        { label: 'Hub →', variant: 'primary', onClick: () => navigate('/') },
+        { label: 'Hub →', variant: 'primary', onClick: () => { window.location.href = '/'; } },
       ],
     });
   }, 300);
@@ -161,6 +177,8 @@ function startPractice() {
   board = createBoard(size);
   moveHistory = [];
   firstMove = true;
+  hintsUsed = 0;
+  currentHint = null;
 
   if (grid) grid.remove();
   grid = renderGrid(puzzleData, handleCellClick, handleCellDrag, handleCellQueen);
@@ -186,7 +204,7 @@ export function unmount() {
 
 function handleCellClick(row, col) {
   if (state !== 'PLAYING') return;
-
+  dismissHint();
   const current = board[row][col];
   let next;
 
@@ -401,6 +419,9 @@ function handleWin() {
   state = 'COMPLETED';
   const elapsed = timer.stop();
 
+  // Clear any active hint
+  dismissHint();
+
   // Add win animation to grid
   grid.classList.add('queens-grid--won');
 
@@ -414,28 +435,130 @@ function handleWin() {
     });
   }
 
-  // Queens-specific confetti colors (pastel palette)
+  // Record stats
+  recordQueensSolve({
+    time: elapsed,
+    difficulty,
+    gridSize: size,
+    moves: moveHistory.length,
+    hints: hintsUsed,
+  });
+
+  // Queens-specific confetti colors
   fireConfetti(['#EF6A6E', '#F5A843', '#7EC880', '#6EB5F5', '#B38EDC']);
   announce(`Puzzle solved! Time: ${formatTime(elapsed)}.`);
 
   setTimeout(() => {
-    const stats = [
+    const modalStats = [
       { label: 'Time', value: formatTime(elapsed) },
       { label: 'Moves', value: String(moveHistory.length) },
       { label: 'Grid', value: `${size}×${size}` },
       { label: 'Difficulty', value: difficulty.charAt(0).toUpperCase() + difficulty.slice(1) },
     ];
+    if (hintsUsed > 0) {
+      modalStats.push({ label: 'Hints Used', value: String(hintsUsed) });
+    }
     if (isDaily) {
-      stats.push({ label: 'Streak', value: `🔥 ${streakData.current}` });
+      modalStats.push({ label: 'Streak', value: `🔥 ${streakData.current}` });
     }
 
     showModal({
       title: '👑 Solved!',
-      stats,
+      stats: modalStats,
       actions: [
+        { label: 'Stats', variant: 'secondary', onClick: () => showStatsModal(showModal) },
         { label: 'New Puzzle', variant: 'secondary', onClick: startPractice },
-        { label: 'Hub →', variant: 'primary', onClick: () => navigate('/') },
+        { label: 'Hub →', variant: 'primary', onClick: () => { window.location.href = '/'; } },
       ],
     });
   }, 600);
+}
+
+// ─── Hint System ─────────────────────────────────────────────────────────────
+
+function handleHint() {
+  if (state !== 'PLAYING') return;
+
+  // Start timer on first interaction
+  if (firstMove) {
+    timer.start();
+    firstMove = false;
+  }
+
+  // If hint panel is open, dismiss it
+  if (currentHint) {
+    dismissHint();
+    return;
+  }
+
+  const hint = getHint(board, regionMap, solution);
+  if (!hint) {
+    showToast('No hints available — the board looks correct!');
+    return;
+  }
+
+  currentHint = hint;
+  hintsUsed++;
+
+  // Apply visual hints to grid
+  clearHintHighlights(grid);
+  applyHintHighlights(grid, hint.highlightCells, hint.stripeCells);
+
+  // Show hint panel
+  const panel = shell.hintPanel;
+  if (panel) {
+    panel.style.display = 'block';
+    panel.innerHTML = `
+      <div class="hint-panel__header">
+        <span class="hint-panel__title">Hint:</span>
+        <button class="hint-panel__close" id="hint-close" aria-label="Dismiss hint">✕</button>
+      </div>
+      <p class="hint-panel__message">${hint.message.replace(/\n/g, '<br>')}</p>
+      <button class="hint-panel__action" id="hint-show-me">Show me</button>
+    `;
+
+    panel.querySelector('#hint-close').addEventListener('click', dismissHint);
+    panel.querySelector('#hint-show-me').addEventListener('click', applyHintActions);
+  }
+
+  // Highlight the Hint button
+  if (shell.hintBtn) shell.hintBtn.classList.add('game-controls__btn--hint-active');
+}
+
+function applyHintActions() {
+  if (!currentHint || !currentHint.actions) return;
+
+  for (const action of currentHint.actions) {
+    const prev = board[action.r][action.c];
+    if (action.value !== prev) {
+      pushMove(action.r, action.c, prev, action.value);
+      board[action.r][action.c] = action.value;
+      updateCell(grid, action.r, action.c, action.value, { animate: action.value !== null });
+    }
+  }
+
+  dismissHint();
+  validateAndHighlight();
+
+  // Win check
+  const queens = findQueens(board);
+  if (queens.length === size && checkWin(board, regionMap)) {
+    handleWin();
+  }
+
+  updateUndoState();
+  autoSave();
+}
+
+function dismissHint() {
+  currentHint = null;
+  clearHintHighlights(grid);
+
+  if (shell?.hintPanel) {
+    shell.hintPanel.style.display = 'none';
+    shell.hintPanel.innerHTML = '';
+  }
+  if (shell?.hintBtn) {
+    shell.hintBtn.classList.remove('game-controls__btn--hint-active');
+  }
 }
