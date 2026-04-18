@@ -1,17 +1,21 @@
 /**
- * Tango Game Controller — Lifecycle, state, events, win flow.
- * Integrates daily pipeline, save/resume, and streak tracking.
+ * Tango Game Controller — Correct LinkedIn-matching interaction model.
+ *
+ * KEY PRINCIPLE: Never block placement. Always allow tap cycle.
+ * Show red striped errors on violating cells. Show toast for constraint errors.
+ *
+ * Tap cycle: empty → sun → moon → empty (always, no validation blocking)
+ *
  * @module games/tango/tango
  */
 
-import { SYM, cloneBoard, isValidPlacement, checkWin } from './tango-logic.js';
-import { renderGrid, updateCell, shakeCell } from './tango-renderer.js';
+import { SYM, SIZE, cloneBoard, checkWin } from './tango-logic.js';
+import { renderGrid, updateCell, highlightErrors, clearErrors } from './tango-renderer.js';
 import {
   getDailyPuzzle,
   getPracticePuzzle,
   saveGameState,
   loadGameState,
-  isDailyCompleted,
 } from './tango-daily.js';
 import { createGameShell, announce } from '../../shared/game-shell.js';
 import { createTimer, formatTime } from '../../shared/timer.js';
@@ -37,18 +41,14 @@ let shell = null;
 let firstMove = true;
 let isDaily = true;
 let saveDebounceId = null;
+let toastTimeout = null;
 
 // ─── Lifecycle ───────────────────────────────────────────────────────────────
 
-/**
- * Mount the Tango game into a container.
- * @param {HTMLElement} container
- */
 export async function mount(container) {
   state = 'LOADING';
   isDaily = true;
 
-  // Build game shell first (shows loading state)
   const shellParts = createGameShell({
     title: 'TANGO',
     onUndo: handleUndo,
@@ -61,7 +61,6 @@ export async function mount(container) {
   const saved = loadGameState();
 
   if (saved && saved.completed) {
-    // Already completed today — show completed state
     await loadFromState(saved, shellParts);
     state = 'COMPLETED';
     showCompletedState();
@@ -69,23 +68,20 @@ export async function mount(container) {
   }
 
   if (saved && !saved.completed) {
-    // Resume in-progress game
     await loadFromState(saved, shellParts);
     state = 'PLAYING';
     firstMove = false;
     timer.start();
+    // Validate current board state
+    validateAndHighlight();
     return;
   }
 
-  // No saved state — generate daily puzzle
   const puzzleData = await getDailyPuzzle();
   loadFromPuzzle(puzzleData, shellParts);
   state = 'PLAYING';
 }
 
-/**
- * Load game from puzzle data (fresh start).
- */
 function loadFromPuzzle(puzzleData, shellParts) {
   board = cloneBoard(puzzleData.puzzle);
   initialPuzzle = puzzleData.puzzle;
@@ -103,9 +99,6 @@ function loadFromPuzzle(puzzleData, shellParts) {
   updateUndoState();
 }
 
-/**
- * Load game from saved state (resume).
- */
 async function loadFromState(saved, shellParts) {
   board = saved.board.map(row => [...row]);
   initialPuzzle = saved.initialPuzzle;
@@ -115,14 +108,13 @@ async function loadFromState(saved, shellParts) {
   dayNumber = saved.dayNumber;
   moveHistory = saved.moveHistory || [];
 
-  // Reconstruct puzzle data for renderer
   const puzzleData = { puzzle: saved.initialPuzzle, constraints: saved.constraints };
   grid = renderGrid(puzzleData, handleCellClick);
   shellParts.boardContainer.appendChild(grid);
 
-  // Apply saved moves to the grid display
-  for (let r = 0; r < 6; r++) {
-    for (let c = 0; c < 6; c++) {
+  // Apply saved board state
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
       if (initialPuzzle[r][c] === null && board[r][c] !== null) {
         updateCell(grid, r, c, board[r][c], { animate: false });
       }
@@ -133,20 +125,15 @@ async function loadFromState(saved, shellParts) {
   updateUndoState();
 }
 
-/**
- * Show completed state (already solved today).
- */
 function showCompletedState() {
   const saved = loadGameState();
   const streak = getStreak('tango');
 
-  // Disable grid interactions
   if (grid) {
     grid.style.pointerEvents = 'none';
     grid.style.opacity = '0.85';
   }
 
-  // Show completion banner
   setTimeout(() => {
     showModal({
       title: '✅ Already Solved!',
@@ -156,29 +143,17 @@ function showCompletedState() {
         { label: 'Best Streak', value: `🔥 ${streak.best}` },
       ],
       actions: [
-        {
-          label: 'Practice',
-          variant: 'secondary',
-          onClick: () => startPractice(),
-        },
-        {
-          label: 'Hub →',
-          variant: 'primary',
-          onClick: () => navigate('/'),
-        },
+        { label: 'Practice', variant: 'secondary', onClick: startPractice },
+        { label: 'Hub →', variant: 'primary', onClick: () => navigate('/') },
       ],
     });
   }, 300);
 }
 
-/**
- * Start a practice (non-daily) puzzle.
- */
 function startPractice() {
   isDaily = false;
   const puzzleData = getPracticePuzzle();
 
-  // Clear and rebuild
   board = cloneBoard(puzzleData.puzzle);
   initialPuzzle = puzzleData.puzzle;
   constraints = puzzleData.constraints;
@@ -188,124 +163,205 @@ function startPractice() {
   moveHistory = [];
   firstMove = true;
 
-  // Rebuild grid
   if (grid) grid.remove();
   grid = renderGrid(puzzleData, handleCellClick);
   shell.boardContainer.appendChild(grid);
 
-  // Reset timer
   if (timer) timer.destroy();
   timer = createTimer(shell.timerDisplay, 0);
   updateUndoState();
-
+  clearToast();
   state = 'PLAYING';
 }
 
-/**
- * Unmount the Tango game.
- */
 export function unmount() {
-  if (timer) {
-    timer.destroy();
-    timer = null;
-  }
-  if (saveDebounceId) {
-    clearTimeout(saveDebounceId);
-    saveDebounceId = null;
-  }
+  if (timer) { timer.destroy(); timer = null; }
+  if (saveDebounceId) { clearTimeout(saveDebounceId); saveDebounceId = null; }
+  clearToast();
   grid = null;
   shell = null;
   state = 'LOADING';
 }
 
-// ─── Auto-Save (debounced) ───────────────────────────────────────────────────
+// ─── Core Interaction: FREE placement with post-validation ───────────────────
 
-function autoSave() {
-  if (!isDaily) return; // Don't save practice games
-  if (saveDebounceId) clearTimeout(saveDebounceId);
-
-  saveDebounceId = setTimeout(() => {
-    saveGameState({
-      date: storage.getToday(),
-      board,
-      constraints,
-      solution,
-      difficulty,
-      dayNumber,
-      elapsed: timer ? timer.getElapsed() : 0,
-      moveHistory,
-      completed: state === 'COMPLETED',
-      initialPuzzle,
-    });
-  }, 300);
-}
-
-// ─── Interaction ─────────────────────────────────────────────────────────────
-
-/**
- * Handle a cell click (tap cycle).
- */
 function handleCellClick(row, col) {
   if (state !== 'PLAYING') return;
-  if (initialPuzzle[row][col] !== null) return;
+  if (initialPuzzle[row][col] !== null) return; // Locked
 
   const current = board[row][col];
   let next;
 
-  // Cycle: null → sun → moon → null
+  // Simple tap cycle: null → sun → moon → null
   if (current === null) next = SYM.SUN;
   else if (current === SYM.SUN) next = SYM.MOON;
-  else next = null;
+  else next = null; // moon → null (clear)
 
+  // ALWAYS place — never block
+  pushMove(row, col, current, next);
+  board[row][col] = next;
+  updateCell(grid, row, col, next, { animate: next !== null });
+
+  // Start timer on first move
+  if (firstMove && next !== null) {
+    timer.start();
+    firstMove = false;
+  }
+
+  // Announce
   if (next === null) {
-    pushMove(row, col, current, null);
-    board[row][col] = null;
-    updateCell(grid, row, col, null, { animate: false });
     announce(`Row ${row + 1}, Column ${col + 1} cleared.`);
   } else {
-    const check = isValidPlacement(board, row, col, next, constraints);
-    if (check.valid) {
-      pushMove(row, col, current, next);
-      board[row][col] = next;
-      updateCell(grid, row, col, next, { animate: true });
-      announce(`${next} placed at Row ${row + 1}, Column ${col + 1}.`);
+    announce(`${next} placed at Row ${row + 1}, Column ${col + 1}.`);
+  }
 
-      if (firstMove) {
-        timer.start();
-        firstMove = false;
-      }
+  // Post-placement: validate entire board and highlight errors
+  validateAndHighlight();
 
-      if (checkWin(board, constraints)) {
-        handleWin();
-      }
-    } else {
-      // Try the other symbol
-      const other = next === SYM.SUN ? SYM.MOON : SYM.SUN;
-      const checkOther = isValidPlacement(board, row, col, other, constraints);
-
-      if (current === null && checkOther.valid) {
-        pushMove(row, col, current, other);
-        board[row][col] = other;
-        updateCell(grid, row, col, other, { animate: true });
-        announce(`${other} placed at Row ${row + 1}, Column ${col + 1}.`);
-
-        if (firstMove) {
-          timer.start();
-          firstMove = false;
-        }
-
-        if (checkWin(board, constraints)) {
-          handleWin();
-        }
-      } else {
-        shakeCell(grid, row, col);
-        announce(`Invalid placement. ${check.reason}`);
-      }
-    }
+  // Check for win (only if board is complete and no errors)
+  if (isBoardFull() && checkWin(board, constraints)) {
+    handleWin();
   }
 
   updateUndoState();
   autoSave();
+}
+
+// ─── Validation & Error Highlighting ─────────────────────────────────────────
+
+function validateAndHighlight() {
+  const errors = findAllErrors();
+  clearErrors(grid);
+
+  if (errors.cells.size > 0) {
+    highlightErrors(grid, errors.cells);
+  }
+
+  // Show toast for constraint violations
+  if (errors.message) {
+    showToast(errors.message);
+  } else {
+    clearToast();
+  }
+}
+
+/**
+ * Find all rule violations on the current board.
+ * Returns: { cells: Set<string>, message: string|null }
+ */
+function findAllErrors() {
+  const errorCells = new Set(); // "row,col" strings
+  let message = null;
+
+  // Check each row and column
+  for (let i = 0; i < SIZE; i++) {
+    // --- Balance check: more than 3 of either symbol ---
+    let rowSuns = 0, rowMoons = 0, colSuns = 0, colMoons = 0;
+    for (let j = 0; j < SIZE; j++) {
+      if (board[i][j] === SYM.SUN) rowSuns++;
+      if (board[i][j] === SYM.MOON) rowMoons++;
+      if (board[j][i] === SYM.SUN) colSuns++;
+      if (board[j][i] === SYM.MOON) colMoons++;
+    }
+
+    if (rowSuns > 3) {
+      // Mark all suns in this row
+      for (let j = 0; j < SIZE; j++) {
+        if (board[i][j] === SYM.SUN) errorCells.add(`${i},${j}`);
+      }
+    }
+    if (rowMoons > 3) {
+      for (let j = 0; j < SIZE; j++) {
+        if (board[i][j] === SYM.MOON) errorCells.add(`${i},${j}`);
+      }
+    }
+    if (colSuns > 3) {
+      for (let j = 0; j < SIZE; j++) {
+        if (board[j][i] === SYM.SUN) errorCells.add(`${j},${i}`);
+      }
+    }
+    if (colMoons > 3) {
+      for (let j = 0; j < SIZE; j++) {
+        if (board[j][i] === SYM.MOON) errorCells.add(`${j},${i}`);
+      }
+    }
+
+    // --- Three consecutive (row) ---
+    for (let j = 0; j <= SIZE - 3; j++) {
+      const a = board[i][j], b = board[i][j + 1], c = board[i][j + 2];
+      if (a !== null && a === b && b === c) {
+        errorCells.add(`${i},${j}`);
+        errorCells.add(`${i},${j + 1}`);
+        errorCells.add(`${i},${j + 2}`);
+      }
+    }
+
+    // --- Three consecutive (column) ---
+    for (let j = 0; j <= SIZE - 3; j++) {
+      const a = board[j][i], b = board[j + 1][i], c = board[j + 2][i];
+      if (a !== null && a === b && b === c) {
+        errorCells.add(`${j},${i}`);
+        errorCells.add(`${j + 1},${i}`);
+        errorCells.add(`${j + 2},${i}`);
+      }
+    }
+  }
+
+  // --- Constraint violations ---
+  for (const con of constraints) {
+    const { r1, c1, r2, c2, type } = con;
+    const v1 = board[r1][c1];
+    const v2 = board[r2][c2];
+
+    if (v1 === null || v2 === null) continue; // Skip if either cell empty
+
+    if (type === 'same' && v1 !== v2) {
+      errorCells.add(`${r1},${c1}`);
+      errorCells.add(`${r2},${c2}`);
+      message = 'Oops! Use identical shapes to join cells with a =.';
+    }
+
+    if (type === 'diff' && v1 === v2) {
+      errorCells.add(`${r1},${c1}`);
+      errorCells.add(`${r2},${c2}`);
+      message = 'Oops! Use different shapes to join cells with a ×.';
+    }
+  }
+
+  return { cells: errorCells, message };
+}
+
+function isBoardFull() {
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
+      if (board[r][c] === null) return false;
+    }
+  }
+  return true;
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  clearToast();
+  let toast = shell.shell.querySelector('.game-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'game-toast';
+    shell.shell.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('game-toast--visible');
+
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('game-toast--visible');
+  }, 4000);
+}
+
+function clearToast() {
+  if (toastTimeout) { clearTimeout(toastTimeout); toastTimeout = null; }
+  const toast = shell?.shell?.querySelector('.game-toast');
+  if (toast) toast.classList.remove('game-toast--visible');
 }
 
 // ─── Move History ────────────────────────────────────────────────────────────
@@ -321,6 +377,7 @@ function handleUndo() {
   board[move.row][move.col] = move.from;
   updateCell(grid, move.row, move.col, move.from, { animate: false });
   announce(`Undo. Row ${move.row + 1}, Column ${move.col + 1} restored.`);
+  validateAndHighlight();
   updateUndoState();
   autoSave();
 }
@@ -328,8 +385,8 @@ function handleUndo() {
 function handleReset() {
   if (state !== 'PLAYING') return;
 
-  for (let r = 0; r < 6; r++) {
-    for (let c = 0; c < 6; c++) {
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
       if (initialPuzzle[r][c] === null) {
         board[r][c] = null;
         updateCell(grid, r, c, null, { animate: false });
@@ -339,15 +396,33 @@ function handleReset() {
   moveHistory = [];
   timer.reset();
   firstMove = true;
+  clearErrors(grid);
+  clearToast();
   updateUndoState();
   autoSave();
   announce('Puzzle reset.');
 }
 
 function updateUndoState() {
-  if (shell && shell.undoBtn) {
-    shell.undoBtn.disabled = moveHistory.length === 0;
-  }
+  if (shell?.undoBtn) shell.undoBtn.disabled = moveHistory.length === 0;
+}
+
+// ─── Auto-Save ───────────────────────────────────────────────────────────────
+
+function autoSave() {
+  if (!isDaily) return;
+  if (saveDebounceId) clearTimeout(saveDebounceId);
+
+  saveDebounceId = setTimeout(() => {
+    saveGameState({
+      date: storage.getToday(),
+      board, constraints, solution, difficulty, dayNumber,
+      elapsed: timer ? timer.getElapsed() : 0,
+      moveHistory,
+      completed: state === 'COMPLETED',
+      initialPuzzle,
+    });
+  }, 300);
 }
 
 // ─── Win Flow ────────────────────────────────────────────────────────────────
@@ -356,27 +431,18 @@ function handleWin() {
   state = 'COMPLETED';
   const elapsed = timer.stop();
 
-  // Record streak (daily only)
   let streakData = { current: 0, best: 0 };
   if (isDaily) {
     streakData = recordWin('tango');
-    // Save completed state
     saveGameState({
       date: storage.getToday(),
-      board,
-      constraints,
-      solution,
-      difficulty,
-      dayNumber,
-      elapsed,
-      moveHistory,
-      completed: true,
-      initialPuzzle,
+      board, constraints, solution, difficulty, dayNumber,
+      elapsed, moveHistory, completed: true, initialPuzzle,
     });
   }
 
-  fireConfetti(['#FFD54F', '#B39DDB', '#57C47A', '#70B5F9', '#F4A0B5']);
-  announce(`Puzzle solved! Time: ${formatTime(elapsed)}.${isDaily ? ` Streak: ${streakData.current} days.` : ''}`);
+  fireConfetti(['#F5A623', '#8EAFC0', '#57C47A', '#70B5F9', '#F4A0B5']);
+  announce(`Puzzle solved! Time: ${formatTime(elapsed)}.`);
 
   setTimeout(() => {
     const stats = [
@@ -384,26 +450,16 @@ function handleWin() {
       { label: 'Moves', value: String(moveHistory.length) },
       { label: 'Difficulty', value: difficulty.charAt(0).toUpperCase() + difficulty.slice(1) },
     ];
-
     if (isDaily) {
       stats.push({ label: 'Streak', value: `🔥 ${streakData.current}` });
-      stats.push({ label: 'Best', value: `🔥 ${streakData.best}` });
     }
 
     showModal({
       title: '🎉 Solved!',
       stats,
       actions: [
-        {
-          label: 'New Puzzle',
-          variant: 'secondary',
-          onClick: () => startPractice(),
-        },
-        {
-          label: 'Hub →',
-          variant: 'primary',
-          onClick: () => navigate('/'),
-        },
+        { label: 'New Puzzle', variant: 'secondary', onClick: startPractice },
+        { label: 'Hub →', variant: 'primary', onClick: () => navigate('/') },
       ],
     });
   }, 600);
