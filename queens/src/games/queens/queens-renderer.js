@@ -348,3 +348,38 @@ export function clearErrors(grid) {
     cell.classList.remove('queens-cell--error');
   });
 }
+
+// ─── Hint Highlighting ───────────────────────────────────────────────────────
+
+/**
+ * Apply hint highlights and stripes to cells.
+ * @param {HTMLElement} grid
+ * @param {string[]} highlightCells - "r,c" keys for blue-glow highlight
+ * @param {string[]} stripeCells - "r,c" keys for diagonal stripe overlay
+ */
+export function applyHintHighlights(grid, highlightCells, stripeCells) {
+  for (const key of highlightCells) {
+    const [r, c] = key.split(',');
+    const cell = grid.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+    if (cell) cell.classList.add('queens-cell--hint-highlight');
+  }
+  for (const key of stripeCells) {
+    const [r, c] = key.split(',');
+    const cell = grid.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+    if (cell) cell.classList.add('queens-cell--hint-stripe');
+  }
+}
+
+/**
+ * Clear all hint highlights and stripes from the grid.
+ * @param {HTMLElement} grid
+ */
+export function clearHintHighlights(grid) {
+  if (!grid) return;
+  grid.querySelectorAll('.queens-cell--hint-highlight').forEach((cell) => {
+    cell.classList.remove('queens-cell--hint-highlight');
+  });
+  grid.querySelectorAll('.queens-cell--hint-stripe').forEach((cell) => {
+    cell.classList.remove('queens-cell--hint-stripe');
+  });
+}
